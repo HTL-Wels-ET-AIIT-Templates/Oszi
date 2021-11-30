@@ -28,8 +28,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f429i_discovery_lcd.h"
-#include "fonts.c"
-
+#include "stm32f429i_discovery_ioe.h"
+#include <stdio.h>
 
 /** @addtogroup Utilities
   * @{
@@ -306,6 +306,22 @@ void LCD_Init(void)
   LTDC_InitStruct.LTDC_TotalHeigh = 327;
   
   LTDC_Init(&LTDC_InitStruct);
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  LCD_LayerInit(); 	// LCD Layer initiatization
+  LTDC_Cmd(ENABLE);  	// Enable the LTDC
+  LCD_SetLayer(LCD_FOREGROUND_LAYER);	// Set LCD foreground layer
+
+  if (IOE_Config() != IOE_OK) {
+    LCD_Clear(LCD_COLOR_RED);
+    LCD_SetTextColor(LCD_COLOR_BLACK);
+    LCD_DisplayStringLine(LCD_LINE_6,(uint8_t*)"   IOE NOT OK      ");
+    LCD_DisplayStringLine(LCD_LINE_7,(uint8_t*)"Reset the board   ");
+    LCD_DisplayStringLine(LCD_LINE_8,(uint8_t*)"and try again     ");
+    while(1);
+  }
+
+
 }  
 
 /**
@@ -1944,11 +1960,12 @@ static void delay(__IO uint32_t nCount)
 }
 #endif /* USE_Delay*/
 
-// 19-oct-2015  scmi
+
+
+// 18-okt-2013  kin
 
 static unsigned int  Line=0;
 static unsigned int  Column=0;
-#include <stdio.h>
 
 #define COLUMN(x) ((x) * (((sFONT *)LCD_GetFont())->Width))
 
@@ -1956,27 +1973,27 @@ static unsigned int  Column=0;
 #define MAX_LINE		 ((320/(((sFONT *)LCD_GetFont())->Height))-1)
 #define MAX_COLUMN	 ((240/(((sFONT *)LCD_GetFont())->Width))-1)
 
-/**
-  * @brief  Displays a pixel.
-  * @param ln: specifies the line position, can be a value from 0 to MAX_LINE.
-  * @param col: specifies the column position, can be a value from 0 to MAX_COLUMN.
-  * @retval None
-  */
+
 void LCD_SetPrintPosition(unsigned int ln, unsigned int col)			 
 {
 	Line 		= ( ln <= MAX_LINE )? ln : MAX_LINE;
 	Column 	= ( col <= MAX_COLUMN ) ? col : MAX_COLUMN;
 }
 
-/**
-  * @brief  Displays a pixel.
-  * @param Xpos: specifies the X position, can be a value from 0 to 240.
-  * @param Ypos: specifies the Y position, can be a value from 0 to 320.
-  * @retval None
-  */
-void LCD_PutPixel (uint16_t Xpos, uint16_t Ypos)
+int __io_putchar(int ch)
 {
-   PutPixel (Xpos, Ypos);
+ fputc(ch, stdout);
+ return ch;
+}
+
+int _write(int file,char *ptr, int len)
+{
+ int DataIdx;
+ for(DataIdx= 0; DataIdx< len; DataIdx++)
+ {
+ __io_putchar(*ptr++);
+ }
+return len;
 }
 
 int fputc(int ch, FILE *f)
@@ -2012,6 +2029,49 @@ int fputc(int ch, FILE *f)
 
 	return (0);
 }
+
+
+
+#ifdef  USE_FULL_ASSERT
+
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t* file, uint32_t line)
+{
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	LCD_SetFont(&Font12x12);
+	LCD_SetPrintPosition(1,0);
+	LCD_Clear(LCD_COLOR_WHITE);
+	LCD_SetColors(LCD_COLOR_RED, LCD_COLOR_WHITE); // TextColor,BackColor
+
+	printf("Assert failed\n\nFile:\n%s\n\nLine:%4d",file,line);
+
+	
+  /* Infinite loop */
+  while (1)
+  {
+  }
+}
+#endif
+
+//void assert_failed(uint8_t* file, uint32_t line)
+//{
+//  GLCD_Init();                          /* Initialize graphical LCD display   */
+//	GLCD_Clear(Black);
+//  GLCD_SetBackColor(Black);
+//  GLCD_SetTextColor(Red);
+//	GLCD_SetPrintPosition(0, 0);
+
+//	printf("Assert failed\nFile:\n%s\nLine:%4d",file,line);
+
+//	while(1);
+//}
 
 
 /**

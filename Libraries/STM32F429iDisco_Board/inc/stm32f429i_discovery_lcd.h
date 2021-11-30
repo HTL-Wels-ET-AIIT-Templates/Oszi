@@ -306,8 +306,7 @@ void     LCD_CtrlLinesConfig(void);
 void     LCD_CtrlLinesWrite(GPIO_TypeDef* GPIOx, uint16_t CtrlPins, BitAction BitVal);
 void     LCD_SPIConfig(void);
 
-void 		 LCD_SetPrintPosition(unsigned int ln, unsigned int col); // scmi
-void     LCD_PutPixel(uint16_t Xpos, uint16_t Ypos);              // scmi
+void 		 LCD_SetPrintPosition(unsigned int ln, unsigned int col); // kin
 
 /**
   * @}

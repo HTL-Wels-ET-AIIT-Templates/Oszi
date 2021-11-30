@@ -16,16 +16,16 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-int GetMeasurementData (float* data1,	      	// Array1 für Messwerte
-                        float* data2,       	// Array2 für Messwerte
-												int nrOfData,	      	// Anzahl der Messwerte
-												float* deltaTimeMs);  // Abtastzeit in ms
+int GetMeasurementData (float* data1,	      	// Array1 fï¿½r Messwerte
+		float* data2,       	// Array2 fï¿½r Messwerte
+		int nrOfData,	      	// Anzahl der Messwerte
+		float* deltaTimeMs);  // Abtastzeit in ms
 
 void PlotData          (int nrMData,          // Anzahl der Messreihen 
-                        float* data1,         // zu zeichnende Messreihe1
-                        float* data2,         // zu zeichnende Messreihe2
-                        float* data3,         // zu zeichnende Messreihe3
-                        int nrOfData);        // Anzahl der Messwerte
+		float* data1,         // zu zeichnende Messreihe1
+		float* data2,         // zu zeichnende Messreihe2
+		float* data3,         // zu zeichnende Messreihe3
+		int nrOfData);        // Anzahl der Messwerte
 //                        int min, int max);    // Minimum, Maximum 
 
 #endif // MDATA_H

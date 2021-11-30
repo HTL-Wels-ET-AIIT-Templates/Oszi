@@ -31,8 +31,8 @@ volatile int32_t SysTickCnt=0;
 
 /* Functions -------------------------------------------------------------------*/
 void SysTick_Handler(void) {	// wird durch den System-Timer alle 10 ms aufgerufen
-															// siehe Funktion: SysTick_Config()
-  SysTickCnt++;
+	// siehe Funktion: SysTick_Config()
+	SysTickCnt++;
 }
 
 static int GetUserButtonPressed () {
@@ -47,13 +47,13 @@ int main(void) {
 
 	RCC_GetClocksFreq(&Clocks);
 	SysTick_Config( Clocks.HCLK_Frequency/100 - 1 );	// 100 Hz ( T=10ms)
-															// Inline-Funktion siehe core_cm4.h (ARM-Grundmodul)
+	// Inline-Funktion siehe core_cm4.h (ARM-Grundmodul)
 
 	LCD_Init();					// LCD initiatization
 	LCD_LayerInit(); 		// LCD Layer initiatization
 	LTDC_Cmd(ENABLE);  	// Enable the LTDC 
 	LCD_SetLayer(LCD_FOREGROUND_LAYER);	// Set LCD foreground layer
- 
+
 	LCD_SetFont(&Font8x12);					// line: 0...39	, column: 0...29
 	LCD_Clear(LCD_COLOR_BLUE);
 	LCD_SetColors(LCD_COLOR_YELLOW, LCD_COLOR_BLUE); // TextColor,BackColor
@@ -70,17 +70,17 @@ int main(void) {
 	printf("(c) Bernhard Breinbauer");
 	PlotData(0, NULL, NULL, NULL, 0); 
 
-  while (1) {
-		
-    if (GetUserButtonPressed()) {  
-			LCD_Clear(LCD_COLOR_BLUE);
-			
-			//ToDo: Messablauf ausführen
-      
+	while (1) {
 
-			
-    }
-  } // while
+		if (GetUserButtonPressed()) {
+			LCD_Clear(LCD_COLOR_BLUE);
+
+			//ToDo: Messablauf ausfï¿½hren
+
+
+
+		}
+	} // while
 } // main
 
 
