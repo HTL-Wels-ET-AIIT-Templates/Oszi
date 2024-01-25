@@ -197,9 +197,9 @@ void PlotData (int nrMData, float* data1, float* data2, float* data3,
 	{
 		if (maxh < data1[i])
 			maxh = data1[i];
-		if (data2 != NULL && maxh < data2[i])
+		if (nrMData > 1 && data2 != NULL && maxh < data2[i])
 			maxh = data2[i];
-		if (data3 != NULL && maxh < data3[i])
+		if (nrMData > 2 && data3 != NULL && maxh < data3[i])
 			maxh = data3[i];
 	}
 
@@ -263,7 +263,7 @@ void PlotData (int nrMData, float* data1, float* data2, float* data3,
 
 	if (nrMData >= 3) {
 
-		LCD_SetColors(LCD_COLOR_MAGENTA, LCD_COLOR_BLACK);
+		LCD_SetColors(LCD_COLOR_GREEN, LCD_COLOR_BLACK);
 
 		for (i=0;i<(nrOfData-1); i++) {
 			xCoord1 = plotOffsetX + i/** dataDeltaMs*/* skalaX;
